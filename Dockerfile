@@ -29,7 +29,7 @@ RUN \
 RUN mkdir -p /app/client/public/images /app/api/logs
 
 # Node API setup
-EXPOSE 3080
+EXPOSE ${PORT}
 ENV HOST=0.0.0.0
 CMD ["npm", "run", "backend"]
 
