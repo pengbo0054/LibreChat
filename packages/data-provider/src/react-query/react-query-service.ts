@@ -74,21 +74,6 @@ export const useGetSharedMessages = (
   );
 };
 
-export const useGetConversationTags = (
-  config?: UseQueryOptions<t.TConversationTagsResponse>,
-): QueryObserverResult<t.TConversationTagsResponse> => {
-  return useQuery<t.TConversationTagsResponse>(
-    [QueryKeys.conversationTags],
-    () => dataService.getConversationTags(),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: false,
-      ...config,
-    },
-  );
-};
-
 export const useGetUserBalance = (
   config?: UseQueryOptions<string>,
 ): QueryObserverResult<string> => {
@@ -137,6 +122,20 @@ export const useUpdateMessageMutation = (
       queryClient.invalidateQueries([QueryKeys.messages, id]);
     },
   });
+};
+
+export const useUpdateMessageContentMutation = (
+  conversationId: string,
+): UseMutationResult<unknown, unknown, t.TUpdateMessageContent, unknown> => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    (payload: t.TUpdateMessageContent) => dataService.updateMessageContent(payload),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([QueryKeys.messages, conversationId]);
+      },
+    },
+  );
 };
 
 export const useUpdateUserKeysMutation = (): UseMutationResult<
@@ -451,4 +450,15 @@ export const useGetCustomConfigSpeechQuery = (
       ...config,
     },
   );
+};
+
+export const useGetBannerQuery = (
+  config?: UseQueryOptions<t.TBannerResponse>,
+): QueryObserverResult<t.TBannerResponse> => {
+  return useQuery<t.TBannerResponse>([QueryKeys.banner], () => dataService.getBanner(), {
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+    ...config,
+  });
 };
